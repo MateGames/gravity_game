@@ -4,8 +4,8 @@ pygame.init()
 
 
 # variables
-width = 1400
-height = 800 
+width = 1400  # 35
+height = 800  # 20
 phat = __file__[:len(__file__)-len(os.path.basename(__file__))]
 FPS = 60
 
@@ -33,7 +33,7 @@ class Hitbox():
 class Player():
     def __init__(self):
         self.friction = .15
-        self.accel_rate = .3
+        self.accel_rate = .2
         self.max_speed = 6
         self.speed = 0
         
