@@ -40,12 +40,13 @@ class Player():
         self.color = RED
         self.size = 50
         self.x =  width/2
-        self.y = 500-self.size
+        self.y = height/2
         
         self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
 
     
     def move(self):
+        # horizontal   
         key = pygame.key.get_pressed()
         
         if key[pygame.K_RIGHT]:
@@ -68,11 +69,34 @@ class Player():
         for line in group:
             if line.type == 'vert' and self.rect.clipline(line.start, line.end):
                 self.x -= self.speed*2
-                self.speed = -self.speed*.2
+                self.speed = -self.speed*.5
         
-
-        self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
         
+        #vertical
+            
+        '''
+        for line in group:
+            if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
+                self.y = line.start[1] - self.size
+               
+        '''
+        while True:
+            limit = False
+            self.y += 1
+            self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
+            
+            for line in group:
+                if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
+                    self.y -= 1
+                    limit = True
+                    break
+            
+            if limit:
+                break
+            
+            
+            self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
+                
             
     def draw(self):
         pygame.draw.rect(screen,self.color,self.rect,0)
