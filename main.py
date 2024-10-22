@@ -8,6 +8,7 @@ width = 1400
 height = 700
 phat = __file__[:len(__file__)-len(os.path.basename(__file__))]
 FPS = 60
+font = pygame.font.Font(f'{phat}\\font\\Mateo-Regular.ttf', 40)
 DEV = False
 
 
@@ -52,6 +53,12 @@ def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size
     return mapp[0] if hig == box_hig else mapp
 
 
+def render_text(text) -> None:
+    textRender = font.render(text, True, WHITE)
+    
+    screen.blit(textRender,((width - textRender.get_width()) / 2,70))
+
+
 class Hitbox():
     def __init__(self,start,end,type):
         self.type = type # horiz, vert
@@ -79,8 +86,11 @@ class Player():
         self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
         
         self.sprite = sprite_splitter(f'{phat}/src/car.png',40,8,8,8,6.25)
+        self.limit = 0
+        self.anime = 0
         
-
+        self.flip = False
+        
     
     def move(self):
         # horizontal   
@@ -110,29 +120,64 @@ class Player():
         
         
         #vertical
-        while True:
-            limit = False
-            self.y += 1
-            self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-            
-            for line in group:
-                if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
+        if key[pygame.K_SPACE]:
+            self.flip = True
+        else:
+            self.flip = False
+        
+        if self.flip:
+                while True:
+                    limit = False
                     self.y -= 1
-                    limit = True
+                    self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
+                    
+                    for line in group:
+                        if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
+                            self.y += 1
+                            limit = True
+                            break
+                    
+                    if limit:
+                        break
+            
+        else:
+            while True:
+                limit = False
+                self.y += 1
+                self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
+                
+                for line in group:
+                    if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
+                        self.y -= 1
+                        limit = True
+                        break
+                
+                if limit:
                     break
-            
-            if limit:
-                break
-            
+                
             
             self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
                 
             
     def draw(self):
-        #pygame.draw.rect(screen,self.color,self.rect,0)
-        #print(round(self.speed,1),self.x)
+        self.limit += 1
+        if self.limit == 8:
+            self.anime += 1
+            self.limit = 0
         
-        screen.blit(self.sprite[0],(self.x,self.y))
+        if self.anime == 5:
+            self.anime = 0
+        
+        sprite = self.sprite[self.anime]
+        if self.flip:
+            sprite = pygame.transform.flip(self.sprite[self.anime], False, True).convert_alpha()
+        
+        if self.speed < 0:
+            sprite = pygame.transform.flip(sprite, True, False).convert_alpha()
+            screen.blit(sprite,(self.x,self.y))
+        else:
+            screen.blit(sprite,(self.x,self.y))
+        
                         
 
 player = Player()
@@ -169,7 +214,10 @@ def main():
         screen.fill(BLACK)
         screen.blit(img,(0,0))
         
-        
+        render_text(
+            'Use "A" and "D", or the arrow keys (<- ->), to move left and right.'
+        )
+                
         for object in group:
             object.draw()
             
