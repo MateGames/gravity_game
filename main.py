@@ -8,7 +8,7 @@ width = 1400
 height = 700
 phat = __file__[:len(__file__)-len(os.path.basename(__file__))]
 FPS = 60
-
+DEV = False
 
 
 # color
@@ -19,6 +19,39 @@ PURPLE = (125, 31, 224)
 RED = (200,50,50)
 
 
+# screen
+screen = pygame.display.set_mode((width,height))
+pygame.display.set_caption("main")
+
+
+def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size:float) -> list:
+    '''
+    Splits a sprite sheet into a matrix of smaller images.
+    Returns a list of images or a matrix based on the sheet's height.
+    '''
+    
+    # Scale the width and height by the size factor
+    wid *= size; hig *= size
+    box_wid *= size; box_hig *= size
+
+    # Load and scale the sprite image
+    sprite = pygame.image.load(sprite)
+    sprite = pygame.transform.scale(sprite, (wid, hig))
+    
+    # Split the sprite into smaller images
+    mapp = []
+    for i in range(int(hig / box_hig)):
+        mapp.append([])
+        for j in range(int(wid / box_wid)):
+            img = pygame.Surface((box_wid, box_hig)).convert_alpha()
+            img.blit(sprite, (0, 0), ((j * box_wid), (i * box_hig), box_wid, box_hig))
+            img.set_colorkey((0,0,0))
+            mapp[i].append(img)
+
+    # Return a flat list if there's only one row, otherwise return the full matrix
+    return mapp[0] if hig == box_hig else mapp
+
+
 class Hitbox():
     def __init__(self,start,end,type):
         self.type = type # horiz, vert
@@ -27,7 +60,8 @@ class Hitbox():
         self.color = BLUE if self.type == 'horiz' else PURPLE
         
     def draw(self):
-        pygame.draw.line(screen,self.color,self.start,self.end,5)
+        if DEV:
+            pygame.draw.line(screen,self.color,self.start,self.end,5)
         
         
 class Player():
@@ -43,6 +77,9 @@ class Player():
         self.y = height/2
         
         self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
+        
+        self.sprite = sprite_splitter(f'{phat}/src/car.png',40,8,8,8,6.25)
+        
 
     
     def move(self):
@@ -73,13 +110,6 @@ class Player():
         
         
         #vertical
-            
-        '''
-        for line in group:
-            if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
-                self.y = line.start[1] - self.size
-               
-        '''
         while True:
             limit = False
             self.y += 1
@@ -99,8 +129,10 @@ class Player():
                 
             
     def draw(self):
-        pygame.draw.rect(screen,self.color,self.rect,0)
+        #pygame.draw.rect(screen,self.color,self.rect,0)
         #print(round(self.speed,1),self.x)
+        
+        screen.blit(self.sprite[0],(self.x,self.y))
                         
 
 player = Player()
@@ -114,10 +146,6 @@ group.append(Hitbox((150,500),(1250,500),'horiz'))
 
 img = pygame.image.load(f'{phat}\\src\\map0.png')
 img = pygame.transform.scale(img,(width,height))
-
-# screen
-screen = pygame.display.set_mode((width,height))
-pygame.display.set_caption("main")
 
 
 def main():
