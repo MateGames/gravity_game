@@ -5,6 +5,36 @@ pygame.init()
 
 store = storage.Storage()
 
+
+def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size:float) -> list:
+    '''
+    Splits a sprite sheet into a matrix of smaller images.
+    Returns a list of images or a matrix based on the sheet's height.
+    '''
+    
+    # Scale the width and height by the size factor
+    wid *= size; hig *= size
+    box_wid *= size; box_hig *= size
+
+    # Load and scale the sprite image
+    sprite = pygame.image.load(sprite)
+    sprite = pygame.transform.scale(sprite, (wid, hig))
+    
+    # Split the sprite into smaller images
+    mapp = []
+    for i in range(int(hig / box_hig)):
+        mapp.append([])
+        for j in range(int(wid / box_wid)):
+            img = pygame.Surface((box_wid, box_hig)).convert_alpha()
+            img.blit(sprite, (0, 0), ((j * box_wid), (i * box_hig), box_wid, box_hig))
+            img.set_colorkey((0,0,0))
+            mapp[i].append(img)
+
+    # Return a flat list if there's only one row, otherwise return the full matrix
+    return mapp[0] if hig == box_hig else mapp
+
+
+
 class Player():
     def __init__(self,screen):
         self.friction = .2
