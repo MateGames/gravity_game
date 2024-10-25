@@ -1,28 +1,20 @@
 import pygame
 import os
+import storage
+import lvl
+import player
 pygame.init()
 
 
-# variables
-width = 1400
-height = 700
-phat = __file__[:len(__file__)-len(os.path.basename(__file__))]
-FPS = 60
-font = pygame.font.Font(f'{phat}\\font\\Mateo-Regular.ttf', 40)
-DEV = False
-
-
-# color
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-BLUE = (30,100,200)
-PURPLE = (125, 31, 224)
-RED = (200,50,50)
-
+store = storage.Storage()
 
 # screen
-screen = pygame.display.set_mode((width,height))
+screen = pygame.display.set_mode((store.width,store.height))
 pygame.display.set_caption("main")
+
+
+palyer = player.Player(screen)
+
 
 
 def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size:float) -> list:
@@ -54,9 +46,9 @@ def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size
 
 
 def render_text(text) -> None:
-    textRender = font.render(text, True, WHITE)
+    textRender = pygame.font.render(text, True, store.WHITE)
     
-    screen.blit(textRender,((width - textRender.get_width()) / 2,70))
+    screen.blit(textRender,((store.width - textRender.get_width()) / 2,70))
 
 
 class Hitbox():
@@ -64,124 +56,15 @@ class Hitbox():
         self.type = type # horiz, vert
         self.start = start
         self.end = end
-        self.color = BLUE if self.type == 'horiz' else PURPLE
+        self.color = store.BLUE if self.type == 'horiz' else store.PURPLE
         
     def draw(self):
-        if DEV:
+        if store.DEV:
             pygame.draw.line(screen,self.color,self.start,self.end,5)
         
-        
-class Player():
-    def __init__(self):
-        self.friction = .2
-        self.accel_rate = .2
-        self.max_speed = 6
-        self.speed = 0
-        
-        self.color = RED
-        self.size = 50
-        self.x =  width/2
-        self.y = height/2
-        
-        self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-        
-        self.sprite = sprite_splitter(f'{phat}/src/car.png',40,8,8,8,6.25)
-        self.limit = 0
-        self.anime = 0
-        
-        self.flip = False
-        
-    
-    def move(self):
-        # horizontal   
-        key = pygame.key.get_pressed()
-        
-        if key[pygame.K_RIGHT]:
-            self.speed += self.accel_rate    
-        if key[pygame.K_LEFT]:
-            self.speed -= self.accel_rate
-        
-        if self.speed > self.max_speed: self.speed = self.max_speed
-        if self.speed < -self.max_speed: self.speed = -self.max_speed
+              
 
-        if not (key[pygame.K_RIGHT] or key[pygame.K_LEFT]) and round(self.speed,1) != 0:
-            if self.speed > 0:
-                self.speed -= self.friction
-            else:   
-                self.speed += self.friction
-                
-        
-        self.x += self.speed
-        
-        for line in group:
-            if line.type == 'vert' and self.rect.clipline(line.start, line.end):
-                self.x -= self.speed*2
-                self.speed = -self.speed*.5
-        
-        
-        #vertical
-        if key[pygame.K_SPACE]:
-            self.flip = True
-        else:
-            self.flip = False
-        
-        if self.flip:
-                while True:
-                    limit = False
-                    self.y -= 1
-                    self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-                    
-                    for line in group:
-                        if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
-                            self.y += 1
-                            limit = True
-                            break
-                    
-                    if limit:
-                        break
-            
-        else:
-            while True:
-                limit = False
-                self.y += 1
-                self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-                
-                for line in group:
-                    if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
-                        self.y -= 1
-                        limit = True
-                        break
-                
-                if limit:
-                    break
-                
-            
-            self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-                
-            
-    def draw(self):
-        self.limit += 1
-        if self.limit == 8:
-            self.anime += 1
-            self.limit = 0
-        
-        if self.anime == 5:
-            self.anime = 0
-        
-        sprite = self.sprite[self.anime]
-        if self.flip:
-            sprite = pygame.transform.flip(self.sprite[self.anime], False, True).convert_alpha()
-        
-        if self.speed < 0:
-            sprite = pygame.transform.flip(sprite, True, False).convert_alpha()
-            screen.blit(sprite,(self.x,self.y))
-        else:
-            screen.blit(sprite,(self.x,self.y))
-        
-                        
-
-player = Player()
-
+# make levl mechanic, test lvl ->
 group = []
 group.append(Hitbox((1250,200),(1250,500),'vert'))
 group.append(Hitbox((150,200),(150,500),'vert'))
@@ -189,8 +72,8 @@ group.append(Hitbox((150,200),(1250,200),'horiz'))
 group.append(Hitbox((150,500),(1250,500),'horiz'))
 
 
-img = pygame.image.load(f'{phat}\\src\\map0.png')
-img = pygame.transform.scale(img,(width,height))
+img = pygame.image.load(f'{store.phat}\\src\\map0.png')
+img = pygame.transform.scale(img,(store.width,store.height))
 
 
 def main():
@@ -198,7 +81,7 @@ def main():
 
     run = True        
     while run:
-        clock.tick(FPS) 
+        clock.tick(store.FPS) 
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -211,7 +94,7 @@ def main():
             run = False 
             break
         
-        screen.fill(BLACK)
+        screen.fill(store.BLACK)
         screen.blit(img,(0,0))
         
         render_text(
