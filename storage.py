@@ -18,4 +18,3 @@ class Storage():
         self.BLUE = (30,100,200)
         self.PURPLE = (125, 31, 224)
         self.RED = (200,50,50)
-        
