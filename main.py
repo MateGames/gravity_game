@@ -8,13 +8,9 @@ pygame.init()
 
 
 store = storage.Storage()
-
 # screen
 screen = pygame.display.set_mode((store.width,store.height))
 pygame.display.set_caption("main")
-
-
-palyer = player.Player(screen)
 
 
 def render_text(text) -> None:
@@ -23,8 +19,18 @@ def render_text(text) -> None:
     screen.blit(textRender,((store.width - textRender.get_width()) / 2,70))
 
 
-img = pygame.image.load(f'{store.phat}\\src\\map0.png')
+img = pygame.image.load(f'{store.phat}//src//map0.png')
 img = pygame.transform.scale(img,(store.width,store.height))
+
+
+group = []
+group.append(lvl.HitLine((1250,200),(1250,500),'vert'))
+group.append(lvl.HitLine((150,200),(150,500),'vert'))
+group.append(lvl.HitLine((150,200),(1250,200),'horiz'))
+group.append(lvl.HitLine((150,500),(1250,500),'horiz'))
+
+lvle = lvl.Lvl(1,group,(200,450),(1200,450))
+player = player.Player(screen,group,(200,450))
 
 
 def main():
@@ -54,15 +60,14 @@ def main():
             'Use "A" and "D", or the arrow keys (<- ->), to move left and right.'
         )
                 
-        for object in group:
-            object.draw()
+        lvle.draw(screen)
             
         player.move()
         player.draw()
         
         
             
-        print(pygame.mouse.get_pos())
+        #print(pygame.mouse.get_pos())
 
         # pygame.display.flip()
         pygame.display.update()

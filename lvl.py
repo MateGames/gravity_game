@@ -1,14 +1,10 @@
-'''
-make a class to store lvl data, it shoud be a general storge
+import pygame
+import storage
+pygame.init()
 
-lvl num
-line/hitbox group: hitLine
-finis and start pos:start,end
+store = storage.Storage()
 
-reset fucntion for storage
-'''
 
-'''
 class HitLine():
     def __init__(self,start,end,type):
         if type not in ['horiz','vert']:
@@ -17,16 +13,23 @@ class HitLine():
         self.start = start
         self.end = end
         self.color = store.BLUE if self.type == 'horiz' else store.PURPLE
-        
-    def draw(self):
-        if store.DEV:
-            pygame.draw.line(screen,self.color,self.start,self.end,5)
-        
 
+
+
+
+class Lvl():
+    def __init__(self,number,hitLine,start,end):
+        self.numbe = number
+        self.hitLine = hitLine
+        self.start = start
+        self.end = end
         
-self.group = []
-self.group.append(HitLine((1250,200),(1250,500),'vert'))
-self.group.append(HitLine((150,200),(150,500),'vert'))
-self.group.append(HitLine((150,200),(1250,200),'horiz'))
-self.group.append(HitLine((150,500),(1250,500),'horiz'))
-'''
+    def draw(self,screen):
+        if store.DEV:
+            # start - end
+            pygame.draw.rect(screen, store.RED, pygame.Rect(self.start,(50,50)), 1)
+            pygame.draw.rect(screen, store.RED, pygame.Rect(self.end,(50,50)), 1)
+            
+            # hitLine
+            for line in self.hitLine:
+                pygame.draw.line(screen,store.BLUE if line.type == 'horiz' else store.PURPLE,line.start,line.end,4)

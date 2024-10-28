@@ -8,7 +8,7 @@ class Storage():
         self.height = 700
         self.phat = Path(__file__).parent
         self.FPS = 60
-        self.font = font.Font(f'{self.phat}\\font\\Mateo-Regular.ttf', 40)
+        self.font = font.Font(f'{self.phat}//font//Mateo-Regular.ttf', 40)
         self.DEV = False
 
 
@@ -18,3 +18,4 @@ class Storage():
         self.BLUE = (30,100,200)
         self.PURPLE = (125, 31, 224)
         self.RED = (200,50,50)
+        
