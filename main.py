@@ -12,18 +12,13 @@ screen = pygame.display.set_mode((store.width,store.height))
 pygame.display.set_caption("main")
 
 
-def render_text(text) -> None:
+def render_text(text,y) -> None:
     textRender = store.font.render(text, True, store.WHITE)
     
-    screen.blit(textRender,((store.width - textRender.get_width()) / 2,70))
+    screen.blit(textRender,((store.width - textRender.get_width()) / 2,y))
 
 
-
-
-
-
-
-level = lvl.Lvl(screen,1,hitLine,(200,450),(1200,450))
+level = lvl.Lvl(screen,'lvl1')
 player = level.player
 
 
@@ -48,14 +43,12 @@ def main():
         
         
         screen.fill(store.BLACK)
-        screen.blit(img,(0,0))
+        screen.blit(level.img,(0,0))
         
-        render_text(
-            'Use "A" and "D", or the arrow keys (<- ->), to move left and right.'
-        )
-                
         level.draw()
-            
+        render_text(level.text,70)
+        render_text(f'LVL:{level.number+1}',650)
+        
         player.move()
         player.draw()
         

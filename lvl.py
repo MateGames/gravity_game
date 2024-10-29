@@ -1,6 +1,7 @@
 import pygame
 import storage
 import player
+import json
 pygame.init()
 
 store = storage.Storage()
@@ -16,19 +17,26 @@ class HitLine():
         self.color = store.BLUE if self.type == 'horiz' else store.PURPLE
 
 
-
-
 class Lvl():
-    def __init__(self,screen,number,hitLine,start,end):
-        self.numbe = number
-        self.hitLine = hitLine
-        self.start = start
-        self.end = end
-        self.screen = screen
-        self.player = player.Player(screen,hitLine,start)
+    def __init__(self,screen,name):
+        with open(store.json, 'r') as f:
+            data = json.load(f)
+        data = data[name]
         
-        img = pygame.image.load(f'{store.phat}//src//lvl//map{self.number}.png')
-        img = pygame.transform.scale(img,(store.width,store.height))
+        self.text = data['text'] 
+        self.number = data['number']
+        self.start = data['start']
+        self.end = data['end']
+        self.screen = screen
+        
+        self.img = pygame.image.load(f'{store.phat}//src//img//lvl//lvl{self.number}.png')
+        self.img = pygame.transform.scale(self.img,(store.width,store.height))
+        
+        self.hitLine = []
+        for line in data['hitLine']:
+            self.hitLine.append(HitLine(line[0],line[1],line[2]))    
+        
+        self.player = player.Player(self.screen,self.hitLine,self.start)
         
         
     def draw(self):

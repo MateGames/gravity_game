@@ -1,0 +1,31 @@
+{
+    "lvl0": {
+        "number": 0,
+        "start": [200,450],
+        "end": [1200,450],
+        "text" : "Use \"A\" and \"D\", or the arrow keys (<- ->), to move left and right.",
+        "hitLine": [
+            [[1250,200],[1250,500],"vert"],
+            [[150,200],[150,500],"vert"],
+            [[150,200],[1250,200],"horiz"],
+            [[150,500],[1250,500],"horiz"]
+        ]
+    },
+
+    "lvl1": {
+        "number": 1,
+        "start": [200,450],
+        "end": [1200,250],
+        "text" : "Press Space to flip gravity and teleport to the ceiling!",
+        "hitLine": [
+            [[1250,200],[1250,500],"vert"],
+            [[150,200],[150,500],"vert"],
+            [[150,200],[1250,200],"horiz"],
+            [[150,500],[1250,500],"horiz"]
+        ]
+    }
+
+
+
+    
+}

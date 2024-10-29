@@ -49,7 +49,7 @@ class Player():
         self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
         
         self.screen = screen
-        self.sprite = sprite_splitter(f'{store.phat}/src/car.png',40,8,8,8,6.25)
+        self.sprite = sprite_splitter(f'{store.phat}//src//img//car.png',40,8,8,8,6.25)
         self.limit = 0
         self.anime = 0
         self.hitLine = hitLine
@@ -79,11 +79,12 @@ class Player():
                 
         
         self.x += self.speed
+        self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
         
         for line in self.hitLine:
             if line.type == 'vert' and self.rect.clipline(line.start, line.end):
-                self.x -= self.speed*2
-                self.speed = -self.speed*.5
+                self.x -= self.speed
+                self.speed = round(-self.speed*.5,1)
         
         
         #vertical
