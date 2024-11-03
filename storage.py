@@ -12,7 +12,6 @@ class Storage():
         self.json = f'{self.phat}//src//lvlData.json'
         self.DEV = False
 
-
         # color
         self.WHITE = (255,255,255)
         self.BLACK = (0,0,0)

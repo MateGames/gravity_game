@@ -5,11 +5,14 @@ import lvl
 pygame.init()
 
 
-
 store = storage.Storage()
+
+
 # screen
 screen = pygame.display.set_mode((store.width,store.height))
 pygame.display.set_caption("main")
+icon = pygame.image.load(f'{store.phat}//src//img//icon.png')
+pygame.display.set_icon(icon)
 
 
 def render_text(text,y) -> None:
@@ -18,7 +21,7 @@ def render_text(text,y) -> None:
     screen.blit(textRender,((store.width - textRender.get_width()) / 2,y))
 
 
-level = lvl.Lvl(screen,'lvl1')
+level = lvl.Lvl(screen,'lvl2')
 player = level.player
 
 
@@ -46,8 +49,8 @@ def main():
         screen.blit(level.img,(0,0))
         
         level.draw()
-        render_text(level.text,70)
-        render_text(f'LVL:{level.number+1}',650)
+        render_text(level.text,60)
+        render_text(f'LVL:{level.number+1}',660)
         
         player.move()
         player.draw()

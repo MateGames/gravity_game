@@ -37,7 +37,7 @@ def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size
 
 class Player():
     def __init__(self,screen,hitLine,spawn):
-        self.friction = .2
+        self.friction = .4
         self.accel_rate = .2
         self.max_speed = 6
         self.speed = 0
@@ -71,11 +71,18 @@ class Player():
         if self.speed > self.max_speed: self.speed = self.max_speed
         if self.speed < -self.max_speed: self.speed = -self.max_speed
 
-        if not (key[pygame.K_RIGHT] or key[pygame.K_LEFT] or key[pygame.K_d] or key[pygame.K_a]) and round(self.speed,1) != 0:
+        self.speed = round(self.speed,1)
+        print(self.speed)
+        if not (key[pygame.K_RIGHT] or key[pygame.K_LEFT] or key[pygame.K_d] or key[pygame.K_a]) and self.speed != 0:
             if self.speed > 0:
                 self.speed -= self.friction
             else:   
                 self.speed += self.friction
+
+            if self.speed < self.friction and self.speed > 0:
+                self.speed = 0
+            if self.speed > -self.friction and self.speed < 0:
+                self.speed = 0
                 
         
         self.x += self.speed
@@ -94,40 +101,23 @@ class Player():
         if key[pygame.K_SPACE] and self.lock:
             self.flip = not self.flip
             self.lock = False
-
  
-        if self.flip:
-                while True:
-                    limit = False
-                    self.y -= 1
-                    self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-                    
-                    for line in self.hitLine:
-                        if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
-                            self.y += 1
-                            limit = True
-                            break
-                    
-                    if limit:
-                        break
-            
-        else:
-            while True:
-                limit = False
-                self.y += 1
-                self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-                
-                for line in self.hitLine:
-                    if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
-                        self.y -= 1
-                        limit = True
-                        break
-                
-                if limit:
-                    break
-                
-            
+
+        while True:
+            limit = False
+            self.y -= 1 if self.flip else -1
             self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
+            
+            for line in self.hitLine:
+                if line.type == 'horiz' and self.rect.clipline(line.start, line.end):
+                    self.y += 1 if self.flip else -1
+                    limit = True
+                    break
+            
+            if limit:
+                break
+            
+        self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
                 
             
     def draw(self):
