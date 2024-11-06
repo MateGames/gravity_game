@@ -5,36 +5,6 @@ pygame.init()
 
 store = storage.Storage()
 
-
-def sprite_splitter(sprite:str, wid:int, hig:int, box_wid:int, box_hig:int, size:float) -> list:
-    '''
-    Splits a sprite sheet into a matrix of smaller images.
-    Returns a list of images or a matrix based on the sheet's height.
-    '''
-    
-    # Scale the width and height by the size factor
-    wid *= size; hig *= size
-    box_wid *= size; box_hig *= size
-
-    # Load and scale the sprite image
-    sprite = pygame.image.load(sprite)
-    sprite = pygame.transform.scale(sprite, (wid, hig))
-    
-    # Split the sprite into smaller images
-    mapp = []
-    for i in range(int(hig / box_hig)):
-        mapp.append([])
-        for j in range(int(wid / box_wid)):
-            img = pygame.Surface((box_wid, box_hig)).convert_alpha()
-            img.blit(sprite, (0, 0), ((j * box_wid), (i * box_hig), box_wid, box_hig))
-            img.set_colorkey((0,0,0))
-            mapp[i].append(img)
-
-    # Return a flat list if there's only one row, otherwise return the full matrix
-    return mapp[0] if hig == box_hig else mapp
-
-
-
 class Player():
     def __init__(self,screen,hitLine,spawn):
         self.friction = .4
@@ -49,13 +19,14 @@ class Player():
         self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
         
         self.screen = screen
-        self.sprite = sprite_splitter(f'{store.phat}//src//img//car.png',40,8,8,8,6.25)
+        self.sprite = store.sprite_splitter(f'{store.phat}//src//img//car.png',40,8,8,8,6.25)
         self.limit = 0
         self.anime = 0
         self.hitLine = hitLine
         
         self.flip = False
         self.lock = True
+        self.cd = 0
         
     
     def move(self):
@@ -98,7 +69,9 @@ class Player():
         if key[pygame.K_SPACE] == False:
             self.lock = True
 
-        if key[pygame.K_SPACE] and self.lock:
+        if self.cd > 0: self.cd -= 1
+        if key[pygame.K_SPACE] and self.lock and self.cd == 0:
+            self.cd = 60
             self.flip = not self.flip
             self.lock = False
  
@@ -118,7 +91,13 @@ class Player():
                 break
             
         self.rect = pygame.Rect((self.x,self.y),(self.size,self.size))
-                
+    
+    
+    def finish(self,pos):
+        finish = pygame.Rect(pos,(50,50))   
+        if self.rect.colliderect(finish):
+            print('finish')
+           
             
     def draw(self):
         self.limit += 1
@@ -138,4 +117,11 @@ class Player():
             self.screen.blit(sprite,(self.x,self.y))
         else:
             self.screen.blit(sprite,(self.x,self.y))
+        
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE] and self.lock and not self.cd == 0:
+            store.render_text(self.screen,f"You can't switch gravity yet!",300,store.RED)
+            
+    class animation():
+        def __init__(self, ):
   

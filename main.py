@@ -15,12 +15,6 @@ icon = pygame.image.load(f'{store.phat}//src//img//icon.png')
 pygame.display.set_icon(icon)
 
 
-def render_text(text,y) -> None:
-    textRender = store.font.render(text, True, store.WHITE)
-    
-    screen.blit(textRender,((store.width - textRender.get_width()) / 2,y))
-
-
 level = lvl.Lvl(screen,'lvl2')
 player = level.player
 
@@ -49,9 +43,10 @@ def main():
         screen.blit(level.img,(0,0))
         
         level.draw()
-        render_text(level.text,60)
-        render_text(f'LVL:{level.number+1}',660)
+        store.render_text(screen,level.text,60,store.WHITE)
+        store.render_text(screen,f'LVL:{level.number+1}',660,store.WHITE)
         
+        player.finish(level.end)
         player.move()
         player.draw()
         
