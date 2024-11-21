@@ -1,0 +1,25 @@
+1. Introduction
+(You’re happy with this.)
+
+Example: "My game is a 2D puzzle platformer created using Python and Pygame, where players control a character navigating through levels using gravity manipulation. Instead of jumping, the player can reverse gravity 180 degrees with a button press, flipping the world upside down."
+
+2. Gameplay Mechanics
+(You’re happy with this too.)
+
+Example: "The key mechanic of the game is the gravity reversal system. The player cannot jump, but pressing a button instantly flips the gravity, allowing the character to walk on the ceiling. This simple yet unique mechanic forms the basis of the puzzles, as the player will need to reverse gravity at the right moments to avoid obstacles, move blocks, and reach different areas. Timing and spatial awareness are crucial."
+
+3. Level Design and Puzzles
+If you're not sure about the specifics here yet, you can keep this section more general for now. You don’t need to go into too much detail.
+
+Example: "The game will feature a variety of puzzles designed to challenge the player’s timing and problem-solving skills. Each level will introduce new elements and obstacles that require creative use of gravity reversal, encouraging the player to think strategically about when and how to flip gravity."
+
+4. Art Style
+(Same as before, focusing on your pixel art.)
+
+Example: "The game will feature a minimalist pixel art style, with a focus on clear, simple visuals that emphasize the puzzle mechanics. I’ll create the pixel art myself, ensuring that it matches the tone of the game—clean and focused, with contrasting environments that make it easy for the player to distinguish between walkable surfaces and hazards."
+
+5. (We’ll skip this section as you requested.)
+6. Technical Implementation
+This is now focused only on tools and general implementation, without mentioning gravity.
+
+Example: "I will develop the game using Python and Pygame, ensuring smooth and responsive gameplay. I’ll also focus on creating intuitive and easy-to-use controls, as well as implementing an efficient physics system for any objects that interact with the player and the environment."

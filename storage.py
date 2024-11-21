@@ -7,7 +7,7 @@ class Storage():
         self.width = 1400
         self.height = 700
         self.phat = Path(__file__).parent
-        self.FPS = 60
+        self.FPS = 30
         self.font = pygame.font.Font(f'{self.phat}//font//Mateo-Regular.ttf', 40)
         self.json = f'{self.phat}//src//lvlData.json'
         self.DEV = False

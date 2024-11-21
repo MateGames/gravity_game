@@ -1,11 +1,14 @@
 import pygame
 import os
 import storage
+import menu
+
 import lvl
 pygame.init()
 
 
 store = storage.Storage()
+menu = menu.Menu(store)
 
 
 # screen
@@ -38,7 +41,29 @@ def main():
             break
         
         
-        
+
+
+
+
+
+        if menu.active_menu == "main":
+            menu.handle_main_menu_events(event)
+        elif menu.active_menu == "levels":
+            menu.handle_level_menu_events(event)
+
+        # Draw the active menu
+        if menu.active_menu == "main":
+            menu.draw_main_menu()
+        elif menu.active_menu == "levels":
+            menu.draw_level_menu()
+
+
+        if menu.selected_level and menu.active_menu is None:
+            print(f"Loading {menu.selected_level}...")
+            run = False
+
+
+        '''
         screen.fill(store.BLACK)
         screen.blit(level.img,(0,0))
         
@@ -50,7 +75,7 @@ def main():
         player.move()
         player.draw()
         
-        
+        '''
             
         #print(pygame.mouse.get_pos())
 

@@ -7,9 +7,9 @@ store = storage.Storage()
 
 class Player():
     def __init__(self,screen,hitLine,spawn):
-        self.friction = .4
-        self.accel_rate = .2
-        self.max_speed = 6
+        self.friction = .8
+        self.accel_rate = .4
+        self.max_speed = 12
         self.speed = 0
         
         self.size = 50
@@ -71,7 +71,7 @@ class Player():
 
         if self.cd > 0: self.cd -= 1
         if key[pygame.K_SPACE] and self.lock and self.cd == 0:
-            self.cd = 60
+            self.cd = 30
             self.flip = not self.flip
             self.lock = False
  
@@ -101,7 +101,7 @@ class Player():
             
     def draw(self):
         self.limit += 1
-        if self.limit == 8:
+        if self.limit == 3:
             self.anime += 1
             self.limit = 0
         
@@ -124,4 +124,4 @@ class Player():
             
     class animation():
         def __init__(self, ):
-  
+            ...
