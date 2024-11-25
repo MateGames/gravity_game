@@ -44,8 +44,6 @@ def main():
 
 
 
-
-
         if menu.active_menu == "main":
             menu.handle_main_menu_events(event)
         elif menu.active_menu == "levels":

@@ -10,7 +10,7 @@ class Storage():
         self.FPS = 30
         self.font = pygame.font.Font(f'{self.phat}//font//Mateo-Regular.ttf', 40)
         self.json = f'{self.phat}//src//lvlData.json'
-        self.DEV = False
+        self.DEV = True
 
         # color
         self.WHITE = (255,255,255)
