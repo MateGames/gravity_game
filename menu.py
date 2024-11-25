@@ -8,7 +8,7 @@ class Menu:
         self.screen = pygame.display.set_mode((self.storage.width, self.storage.height))
         pygame.display.set_caption("Game Menu")
         self.active_menu = "main"  # "main", "levels", or None (in-game)
-        self.selected_level = None  # Tracks the selected level
+        self.selected_level = None
         self.level_count = 9
         self.github = False
         self.background_main = pygame.image.load(f"{self.storage.phat}//src//img//main_menu.png")
@@ -20,9 +20,9 @@ class Menu:
         """
         Render a button with text centered inside its clickable area.
         """
-        #pygame.draw.rect(self.screen, color, rect, 0)  # Draw button background
+        #pygame.draw.rect(self.screen, color, rect, 0)  # button background
         if self.storage.DEV:
-            pygame.draw.rect(self.screen, self.storage.RED, rect, 2)  # Draw boundary in DEV mode
+            pygame.draw.rect(self.screen, self.storage.RED, rect, 2)
 
         # Render text in the center of the button
         text_render = self.storage.font.render(text, True, self.storage.WHITE)
@@ -66,9 +66,9 @@ class Menu:
         self.screen.blit(self.background_main, (0, 0))
         self.storage.render_text(self.screen, "Main Menu", 50, self.storage.WHITE)
 
-        # Right-aligned buttons
+        # on the right, padding 50px
         button_width, button_height = 300, 60
-        x = self.storage.width - button_width - 50  # Right alignment with 50px padding
+        x = self.storage.width - button_width - 50
         self.draw_button("Play", pygame.Rect(x, 200, button_width, button_height), self.storage.BLUE)
         self.draw_button("GitHub", pygame.Rect(x, 300, button_width, button_height), self.storage.PURPLE)
         self.draw_button("Quit", pygame.Rect(x, 400, button_width, button_height), self.storage.RED)
@@ -80,7 +80,7 @@ class Menu:
         self.screen.blit(self.background_lvl, (0, 0))
         self.storage.render_text(self.screen, "Select Level", 50, self.storage.WHITE)
 
-        # Two-column level layout
+        # 3by3
         button_width, button_height = 160, 50
         padding_x, padding_y = 140, 100
         start_x = 320
@@ -116,7 +116,7 @@ class Menu:
 
                 # Check if the button was clicked
                 if bx <= x <= bx + button_width and by <= y <= by + button_height:
-                    self.selected_level = f"level{i + 1}"  # Set selected level
+                    self.selected_level = f"lvl{i}"  # Set selected level
                     self.active_menu = None  # Transition to game
                     break
 

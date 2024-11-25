@@ -16,14 +16,13 @@ screen = pygame.display.set_mode((store.width,store.height))
 pygame.display.set_caption("main")
 icon = pygame.image.load(f'{store.phat}//src//img//icon.png')
 pygame.display.set_icon(icon)
-
-
-level = lvl.Lvl(screen,'lvl2')
-player = level.player
-
-
-def main():
+ 
+ 
+ 
+ 
+def main(): 
     clock = pygame.time.Clock()
+    active = False
 
     run = True        
     while run:
@@ -42,8 +41,6 @@ def main():
         
         
 
-
-
         if menu.active_menu == "main":
             menu.handle_main_menu_events(event)
         elif menu.active_menu == "levels":
@@ -56,31 +53,40 @@ def main():
             menu.draw_level_menu()
 
 
-        if menu.selected_level and menu.active_menu is None:
+
+        if menu.selected_level and menu.active_menu is None and not active:
+            level = lvl.Lvl(screen,menu.selected_level)
+            player = level.player
+            active = True
             print(f"Loading {menu.selected_level}...")
-            run = False
-
-
-        '''
-        screen.fill(store.BLACK)
-        screen.blit(level.img,(0,0))
-        
-        level.draw()
-        store.render_text(screen,level.text,60,store.WHITE)
-        store.render_text(screen,f'LVL:{level.number+1}',660,store.WHITE)
-        
-        player.finish(level.end)
-        player.move()
-        player.draw()
-        
-        '''
             
+
+        if active and menu.active_menu is None:
+            screen.fill(store.BLACK)
+            screen.blit(level.img,(0,0))
+            
+            level.draw()
+            store.render_text(screen,level.text,60,store.WHITE)
+            store.render_text(screen,f'LVL:{level.number+1}',660,store.WHITE)
+            
+            if player.finish(level.end):
+                menu.active_menu = "levels"
+                menu.selected_level = None
+                active = False
+                
+            player.move()
+            player.draw()
+            
+        
+        
+
+  
         #print(pygame.mouse.get_pos())
 
-        # pygame.display.flip()
+        pygame.display.flip()
         pygame.display.update()
     pygame.quit()
-    quit()
+
 
 if __name__ == '__main__':
     main()

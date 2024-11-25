@@ -96,7 +96,9 @@ class Player():
     def finish(self,pos):
         finish = pygame.Rect(pos,(50,50))   
         if self.rect.colliderect(finish):
-            print('finish')
+            return True
+        else:
+            return False
            
             
     def draw(self):
