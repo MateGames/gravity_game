@@ -89,15 +89,17 @@ def main():
                 
             player.move()
             
-            if object:
-                if object.button_rect.colliderect(player.rect):
-                    if not object.action:
-                        player.hitLine.pop()
-                        player.hitLine.pop()
-                    object.is_pressd()
+            try:
+                if object:
+                    if object.button_rect.colliderect(player.rect):
+                        if not object.action:
+                            player.hitLine.pop()
+                            player.hitLine.pop()
+                        object.is_pressd()
+                    
+                    object.draw(screen)
+            except: pass
                 
-                object.draw(screen)
-            
             player.draw()
 
         #print(pygame.mouse.get_pos())
