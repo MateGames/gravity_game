@@ -43,7 +43,6 @@ class Player():
         if self.speed < -self.max_speed: self.speed = -self.max_speed
 
         self.speed = round(self.speed,1)
-        print(self.speed)
         if not (key[pygame.K_RIGHT] or key[pygame.K_LEFT] or key[pygame.K_d] or key[pygame.K_a]) and self.speed != 0:
             if self.speed > 0:
                 self.speed -= self.friction

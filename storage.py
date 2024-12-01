@@ -10,7 +10,7 @@ class Storage():
         self.FPS = 30
         self.font = pygame.font.Font(f'{self.phat}//font//Mateo-Regular.ttf', 40)
         self.json = f'{self.phat}//src//lvlData.json'
-        self.DEV = True
+        self.DEV = False
 
         # color
         self.WHITE = (255,255,255)
@@ -58,4 +58,3 @@ class Storage():
 taile ratio = 16 : 28, 168px : 98px
 tile = 1 : 1, 8px : 8px
 '''
-

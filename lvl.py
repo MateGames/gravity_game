@@ -2,7 +2,7 @@ import pygame
 import storage
 import player
 import json
-pygame.init()
+import object
 
 store = storage.Storage()
 
@@ -10,7 +10,7 @@ store = storage.Storage()
 class HitLine():
     def __init__(self,start,end,type):
         if type not in ['horiz','vert']:
-            raise ValueError('hitboxLine must be either "horiz" or "vert"')
+            raise ValueError('hitboxLine must be: "horiz" or "vert"')
         self.type = type # horiz, vert
         self.start = start
         self.end = end
@@ -38,8 +38,15 @@ class Lvl():
         
         self.player = player.Player(self.screen,self.hitLine,self.start)
         
+        try:
+            self.object = object.ButtonDoor(data['button'],data['dore'])
+            print('ob')
+            
+        except: pass
         
-    def draw(self):
+    def draw(self,screen):
+        screen.blit(self.img,(0,0))
+        
         if store.DEV:
             # start - end
             pygame.draw.rect(self.screen, store.RED, pygame.Rect(self.start,(50,50)), 1)
@@ -48,5 +55,3 @@ class Lvl():
             # hitLine
             for line in self.hitLine:
                 pygame.draw.line(self.screen,store.BLUE if line.type == 'horiz' else store.PURPLE,line.start,line.end,4)
-                
-                

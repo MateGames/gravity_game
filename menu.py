@@ -3,29 +3,29 @@ import webbrowser
 from storage import Storage
 
 class Menu:
-    def __init__(self, storage):
-        self.storage = storage
-        self.screen = pygame.display.set_mode((self.storage.width, self.storage.height))
+    def __init__(self, store):
+        self.store = store
+        self.screen = pygame.display.set_mode((self.store.width, self.store.height))
         pygame.display.set_caption("Game Menu")
         self.active_menu = "main"  # "main", "levels", or None (in-game)
         self.selected_level = None
         self.level_count = 9
         self.github = False
-        self.background_main = pygame.image.load(f"{self.storage.phat}//src//img//main_menu.png")
-        self.background_main = pygame.transform.scale(self.background_main, (self.storage.width, self.storage.height))
-        self.background_lvl = pygame.image.load(f"{self.storage.phat}//src//img//lvl_select.png")
-        self.background_lvl = pygame.transform.scale(self.background_lvl, (self.storage.width, self.storage.height))
+        self.background_main = pygame.image.load(f"{self.store.phat}//src//img//main_menu.png")
+        self.background_main = pygame.transform.scale(self.background_main, (self.store.width, self.store.height))
+        self.background_lvl = pygame.image.load(f"{self.store.phat}//src//img//lvl_select.png")
+        self.background_lvl = pygame.transform.scale(self.background_lvl, (self.store.width, self.store.height))
 
     def draw_button(self, text, rect, color):
         """
         Render a button with text centered inside its clickable area.
         """
         #pygame.draw.rect(self.screen, color, rect, 0)  # button background
-        if self.storage.DEV:
-            pygame.draw.rect(self.screen, self.storage.RED, rect, 2)
+        if self.store.DEV:
+            pygame.draw.rect(self.screen, self.store.RED, rect, 2)
 
         # Render text in the center of the button
-        text_render = self.storage.font.render(text, True, self.storage.WHITE)
+        text_render = self.store.font.render(text, True, self.store.WHITE)
         text_x = rect.x + (rect.width - text_render.get_width()) // 2
         text_y = rect.y + (rect.height - text_render.get_height()) // 2
         self.screen.blit(text_render, (text_x, text_y))
@@ -37,20 +37,20 @@ class Menu:
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             button_width, button_height = 300, 60
-            right_x = self.storage.width - button_width - 50
+            right_x = self.store.width - button_width - 50
 
             # Play button
-            if right_x <= x <= right_x + button_width and 200 <= y <= 200 + button_height:
+            if 1050 <= x <= 1250 and 150 <= y <= 250:
                 self.active_menu = "levels"
                 
             # GitHub button
-            elif right_x <= x <= right_x + button_width and 300 <= y <= 300 + button_height:
+            elif 1095 <= x <= 1255 and 350 <= y <= 400:
                 if not self.github:
                     webbrowser.open("https://github.com/MateGames/gravity_game")
                     self.github = True
             
             # Quit button
-            elif right_x <= x <= right_x + button_width and 400 <= y <= 400 + button_height:
+            elif 1095 <= x <= 1255 and 500 <= y <= 550:
                 pygame.quit()
                 raise SystemExit
             
@@ -61,24 +61,24 @@ class Menu:
             
     def draw_main_menu(self):
         """
-        Draw the main menu screen.
+        Draw the main menu screen.c
         """
         self.screen.blit(self.background_main, (0, 0))
-        self.storage.render_text(self.screen, "Main Menu", 50, self.storage.WHITE)
+        self.store.render_text(self.screen, "Main Menu", 50, self.store.WHITE)
 
         # on the right, padding 50px
         button_width, button_height = 300, 60
-        x = self.storage.width - button_width - 50
-        self.draw_button("Play", pygame.Rect(x, 200, button_width, button_height), self.storage.BLUE)
-        self.draw_button("GitHub", pygame.Rect(x, 300, button_width, button_height), self.storage.PURPLE)
-        self.draw_button("Quit", pygame.Rect(x, 400, button_width, button_height), self.storage.RED)
+        x = self.store.width - button_width - 50
+        self.draw_button("Play", pygame.Rect(1050, 150, 200, 100), self.store.BLUE)
+        self.draw_button("GitHub", pygame.Rect(1095, 350, 160, 50), self.store.PURPLE)
+        self.draw_button("Quit", pygame.Rect(1095, 500, 160, 50), self.store.RED)
 
     def draw_level_menu(self):
         """
         Draw the level selection menu screen.
         """
         self.screen.blit(self.background_lvl, (0, 0))
-        self.storage.render_text(self.screen, "Select Level", 50, self.storage.WHITE)
+        self.store.render_text(self.screen, "Select Level", 50, self.store.WHITE)
 
         # 3by3
         button_width, button_height = 160, 50
@@ -91,11 +91,11 @@ class Menu:
             row = i // 3
             x = start_x + col * (button_width + padding_x)
             y = start_y + row * (button_height + padding_y)
-            self.draw_button(f"Level {i + 1}", pygame.Rect(x, y, button_width, button_height), self.storage.BLUE)
+            self.draw_button(f"Level {i + 1}", pygame.Rect(x, y, button_width, button_height), self.store.BLUE)
 
 
         # Back button
-        self.draw_button("Back", pygame.Rect(45, self.storage.height - 100, 160, 50), self.storage.RED)
+        self.draw_button("Back", pygame.Rect(45, self.store.height - 100, 160, 50), self.store.RED)
 
     def handle_level_menu_events(self, event):
         """
@@ -121,5 +121,5 @@ class Menu:
                     break
 
             # Back button
-            if 45 <= x <= 45 + 160 and self.storage.height - 100 <= y <= self.storage.height - 50:
+            if 45 <= x <= 45 + 160 and self.store.height - 100 <= y <= self.store.height - 50:
                 self.active_menu = "main"

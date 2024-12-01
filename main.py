@@ -2,8 +2,8 @@ import pygame
 import os
 import storage
 import menu
-
 import lvl
+import sys
 pygame.init()
 
 
@@ -23,6 +23,7 @@ pygame.display.set_icon(icon)
 def main(): 
     clock = pygame.time.Clock()
     active = False
+    ob = False
 
     run = True        
     while run:
@@ -35,7 +36,7 @@ def main():
 
         # key events
         key = pygame.key.get_pressed()
-        if key[pygame.K_ESCAPE]:
+        if key[pygame.K_ESCAPE] and store.DEV:
             run = False 
             break
         
@@ -55,17 +56,29 @@ def main():
 
 
         if menu.selected_level and menu.active_menu is None and not active:
-            level = lvl.Lvl(screen,menu.selected_level)
-            player = level.player
-            active = True
-            print(f"Loading {menu.selected_level}...")
+            if int(menu.selected_level[-1:])+1 >= 5:
+                store.render_text(screen,'level work in progress!',120,store.RED)
+                menu.active_menu = "levels"
+                menu.selected_level = None
+                active = False
+            else:
+                level = lvl.Lvl(screen,menu.selected_level)
+                player = level.player
+                try:
+                    object =  level.object
+                    ob = True
+                except: 
+                    ob = False
+                    #print('No ob!')
+                active = True
+                #print(f"Loading {menu.selected_level}...")
             
-
+        print(pygame.time.get_ticks() / 1000
+)
         if active and menu.active_menu is None:
             screen.fill(store.BLACK)
-            screen.blit(level.img,(0,0))
             
-            level.draw()
+            level.draw(screen)
             store.render_text(screen,level.text,60,store.WHITE)
             store.render_text(screen,f'LVL:{level.number+1}',660,store.WHITE)
             
@@ -75,17 +88,25 @@ def main():
                 active = False
                 
             player.move()
-            player.draw()
             
-        
-        
+            if object:
+                if object.button_rect.colliderect(player.rect):
+                    if not object.action:
+                        player.hitLine.pop()
+                        player.hitLine.pop()
+                    object.is_pressd()
+                
+                object.draw(screen)
+            
+            player.draw()
 
-  
         #print(pygame.mouse.get_pos())
 
         pygame.display.flip()
         pygame.display.update()
+
     pygame.quit()
+    sys.exit()
 
 
 if __name__ == '__main__':
